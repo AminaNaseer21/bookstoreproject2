@@ -3,9 +3,11 @@
  */
 package bookstoreproject;
 
+import java.util.ArrayList;
+
 import bookstoreproject.inventory.*;
-import bookstoreproject.pricing.*;
 import bookstoreproject.sales.*;
+import bookstoreproject.io.*;
 
 public class App {
     public String makeAnnouncement() {
@@ -14,29 +16,42 @@ public class App {
 
     public static void main(String[] args) {
         System.out.println(new App().makeAnnouncement());
-        // Initialize the Inventory, Pricing, and Sales classes
-        Inventory inventory = new Inventory();
-        Pricing pricing = new Pricing();
-        Sales sales = new Sales(inventory, pricing);
+        // Initialize the Inventory and Sales classes
+        InventoryMgnt inventory_mgnt = new InventoryMgnt();
+        InventoryItem bookItem = InventoryItem.createInventoryItem(inventory_mgnt,"Book", 20, 14.0);
+        InventoryItem penItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pen", 20, 2.0);
+        InventoryItem pencilItem = InventoryItem.createInventoryItem(inventory_mgnt,"Pencil", 20, 1.0);
+        InventoryItem stationaryItem = InventoryItem.createInventoryItem(inventory_mgnt,"Stationary", 20, 4.0);
+
+        ArrayList<ItemEntry> entries = ItemEntry.readEntriesFromFile("inventory_items.txt");
+            
+        for(ItemEntry entry : entries) {
+            System.out.println("Product: " + entry.getProduct());
+            System.out.println("Quantity: " + entry.getQuantity());
+            System.out.println("Price: " + entry.getPrice());
+            System.out.println("-----------------------");
+        }
+    
+        Sales sales = new Sales(inventory_mgnt);
 
           // Header
           System.out.printf("%-15s %-15s %-15s%n", "Product", "Availability", "Price");
 
           // Display initial inventory and pricing for demonstration
-          System.out.printf("%-15s %-15s %-15.2f%n", "Books", inventory.isAvailable("Book", 1), pricing.getPrice("Book"));
-          System.out.printf("%-15s %-15s %-15.2f%n", "Stationary", inventory.isAvailable("Stationary", 1), pricing.getPrice("Stationary"));
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pencils", inventory.isAvailable("Pencil", 1), pricing.getPrice("Pencil"));
-          System.out.printf("%-15s %-15s %-15.2f%n", "Pens", inventory.isAvailable("Pen", 1), pricing.getPrice("Pen"));
+          System.out.printf("%-15s %-15s %-15.2f%n", "Books", inventory_mgnt.isAvailable(bookItem, 1), bookItem.getPricingInfo().getPrice());
+          System.out.printf("%-15s %-15s %-15.2f%n", "Stationary", inventory_mgnt.isAvailable(stationaryItem, 1), stationaryItem.getPricingInfo().getPrice());
+          System.out.printf("%-15s %-15s %-15.2f%n", "Pencils", inventory_mgnt.isAvailable(pencilItem, 1), pencilItem.getPricingInfo().getPrice());
+          System.out.printf("%-15s %-15s %-15.2f%n", "Pens", inventory_mgnt.isAvailable(penItem, 1), penItem.getPricingInfo().getPrice());
   
           // Perform some sales transactions and show results
           System.out.println("\nSales Transactions:");
-          boolean bookSale = sales.makeSale("Book", 2);
+          boolean bookSale = sales.makeSale(bookItem, 2);
           System.out.printf("Sold 2 Books: %-5s%n", bookSale);
   
-          boolean pencilSale = sales.makeSale("Pencil", 5);
+          boolean pencilSale = sales.makeSale(pencilItem, 5);
           System.out.printf("Sold 5 Pencils: %-5s%n", pencilSale);
   
-          boolean stationarySale = sales.makeSale("Stationary", 3);
+          boolean stationarySale = sales.makeSale(stationaryItem, 3);
           System.out.printf("Sold 3 Stationary items: %-5s%n", stationarySale);
   
           // Display class name using Reflection for demonstration
