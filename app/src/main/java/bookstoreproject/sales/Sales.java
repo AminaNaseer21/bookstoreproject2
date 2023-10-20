@@ -1,24 +1,20 @@
 package bookstoreproject.sales;
 
 import bookstoreproject.inventory.*;
-import bookstoreproject.pricing.*;
-
 public class Sales {
 
-    private Inventory inventory;
-    private Pricing pricing;
+    private InventoryMgnt inventory;
 
-    public Sales(Inventory inventory, Pricing pricing) {
+    public Sales(InventoryMgnt inventory) {
         this.inventory = inventory;
-        this.pricing = pricing;
     }
 
-    public boolean makeSale(String productType, int quantity) {
-        double price = pricing.getPrice(productType);
-        boolean isAvailable = inventory.isAvailable(productType, quantity);
+    public boolean makeSale(InventoryItem item, int quantity) {
+        double price = item.getPricingInfo().getPrice();
+        boolean isAvailable = inventory.isAvailable(item, quantity);
 
         if (isAvailable) {
-            inventory.decrementStock(productType, quantity);
+            inventory.decrementQuantity(item, quantity);
             
             // Update Sales Counter (assuming it's a static class)
             SalesCounter.updateTotalSales(price * quantity);
