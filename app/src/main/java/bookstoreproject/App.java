@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import bookstoreproject.inventory.*;
 import bookstoreproject.sales.*;
 import bookstoreproject.io.*;
+import bookstoreproject.product.ProductInfo;
 
 public class App {
     public String makeAnnouncement() {
@@ -42,7 +43,7 @@ public class App {
           System.out.printf("%-15s %-15s %-15.2f%n", "Stationary", inventory_mgnt.isAvailable(stationaryItem, 1), stationaryItem.getPricingInfo().getPrice());
           System.out.printf("%-15s %-15s %-15.2f%n", "Pencils", inventory_mgnt.isAvailable(pencilItem, 1), pencilItem.getPricingInfo().getPrice());
           System.out.printf("%-15s %-15s %-15.2f%n", "Pens", inventory_mgnt.isAvailable(penItem, 1), penItem.getPricingInfo().getPrice());
-  
+        /* 
           // Perform some sales transactions and show results
           System.out.println("\nSales Transactions:");
           boolean bookSale = sales.makeSale(bookItem, 2);
@@ -53,7 +54,27 @@ public class App {
   
           boolean stationarySale = sales.makeSale(stationaryItem, 3);
           System.out.printf("Sold 3 Stationary items: %-5s%n", stationarySale);
-  
+        */
+        String[] productsToSell = {"Book", "Pencil", "Stationary", "Item From inventory_items.txt", "NonExistentItem"};
+        int[] quantitiesToSell = {2, 5, 3, 1, 1};  // Quantities for each product
+
+        for(int i = 0; i < productsToSell.length; i++) {
+            String product = productsToSell[i];
+            int quantity = quantitiesToSell[i];
+
+            try {
+                ProductInfo productInfo = productInfoMap.get(product);
+                if(productInfo == null) {
+                    throw new IllegalArgumentException("The product " + product + " does not exist in the inventory.");
+                }
+                InventoryItem inventoryItem = inventory_mgnt.getItem(productInfo);
+                boolean saleResult = sales.makeSale(inventoryItem, quantity);
+                System.out.printf("Sold %d %s: %-5s%n", quantity, product, saleResult);
+            } catch (Exception e) {
+                System.out.println("Error processing sale for " + product + ": " + e.getMessage());
+            }
+        }
+
           // Display class name using Reflection for demonstration
           System.out.printf("\nClass of Sales object: %s%n", sales.getClass().getSimpleName());
   
