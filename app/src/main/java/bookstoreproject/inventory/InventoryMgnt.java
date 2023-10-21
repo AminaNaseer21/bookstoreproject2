@@ -7,14 +7,18 @@ public class InventoryMgnt {
 
     // HashMap to store inventory items
     private HashMap<ProductInfo, InventoryItem> inventory;
+    private HashMap<String, ProductInfo> productInfoMap;
 
     public InventoryMgnt() {
         this.inventory = new HashMap<>();
+        this.productInfoMap = new HashMap<>(); // Initialize the productInfoMap
     }
+
 
     // Add an item to the inventory
     public void addItem(ProductInfo productInfo, InventoryItem item) {
         this.inventory.put(productInfo, item);
+        productInfoMap.put(productInfo.getProductInfoName(), productInfo);
     }
 
     // Retrieve an item from the inventory based on its ProductInfo
@@ -31,6 +35,10 @@ public class InventoryMgnt {
     public void removeItem(ProductInfo productInfo) {
         this.inventory.remove(productInfo);
     }    
+
+    public HashMap<String, ProductInfo> getProductInfoMap() {
+        return productInfoMap;
+    }
 
     // Check if the requested quantity of an item is available
     public boolean isAvailable(InventoryItem item, int requiredQuantity) {
