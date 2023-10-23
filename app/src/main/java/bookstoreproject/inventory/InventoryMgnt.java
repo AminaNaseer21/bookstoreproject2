@@ -42,11 +42,16 @@ public class InventoryMgnt {
     public void decrementQuantity(InventoryItem item, int decrementBy) {
         // Get the current quantity, set the new quantity and check if 
         int currentQuantity = item.getQuantityInfo().getQuantity();
+        try{
         int newQuantity = currentQuantity - decrementBy;
         newQuantity = Math.max(newQuantity, 0);
-
+    
         // Update the quantity
         item.getQuantityInfo().setQuantity(newQuantity);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
 
