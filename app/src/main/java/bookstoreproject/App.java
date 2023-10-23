@@ -7,6 +7,7 @@ import bookstoreproject.inventory.*;
 import bookstoreproject.sales.*;
 import bookstoreproject.io.*;
 import bookstoreproject.product.ProductInfo;
+import bookstoreproject.product.ProductInfo;
 
 public class App {
     public String makeAnnouncement() {
