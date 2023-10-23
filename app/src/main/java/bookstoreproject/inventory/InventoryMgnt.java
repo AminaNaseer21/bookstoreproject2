@@ -36,7 +36,7 @@ public class InventoryMgnt {
         this.inventory.remove(productInfo);
     }    
 
-    public HashMap<String, ProductInfo> getProductInfoMap() {
+    public HashMap<String, ProductInfo> getProductInfoMap(ProductInfo productInfo) {
         return productInfoMap;
     }
 
