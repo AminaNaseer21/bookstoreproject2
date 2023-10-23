@@ -21,6 +21,12 @@ public class ItemEntry {
         
         try (Scanner scanner = new Scanner(new File(filename))) {
             while(scanner.hasNextLine()) {
+                try {
+                    scanner.hasNextLine();
+                    scanner.hasNextLine();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
                 String line = scanner.nextLine();
                 String[] parts = line.split(",");
                 
