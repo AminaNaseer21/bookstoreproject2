@@ -57,18 +57,25 @@ public class App {
         }
 
         // Perform some sales transactions and show results
-        System.out.println("\nSales Transactions:");
-        boolean bookSale = sales.makeSale(bookItem, 2);
-        System.out.printf("Sold 2 Books: %-5s%n", bookSale);
+        String[] productsToSell = {"Book", "Pencil", "Stationary"};
+        int[] quantitiesToSell = {2, 5, 3,};  // Quantities for each product
 
-        boolean pencilSale = sales.makeSale(pencilItem, 5);
-        System.out.printf("Sold 5 Pencils: %-5s%n", pencilSale);
+        for(int i = 0; i < productsToSell.length; i++) {
+            String product = productsToSell[i];
+            int quantity = quantitiesToSell[i];
 
-        boolean stationarySale = sales.makeSale(stationaryItem, 3);
-        System.out.printf("Sold 3 Stationary items: %-5s%n", stationarySale);
-
-        // Display class name using Reflection for demonstration
-        System.out.printf("\nClass of Sales object: %s%n", sales.getClass().getSimpleName());
+            try {
+                ProductInfo productInfo = productInfoMap.get(product);
+                if(productInfo == null) {
+                    throw new IllegalArgumentException("The product " + product + " does not exist in the inventory.");
+                }
+                InventoryItem inventoryItem = inventory_mgnt.getItem(productInfo);
+                boolean saleResult = sales.makeSale(inventoryItem, quantity);
+                System.out.printf("Sold %d %s: %-5s%n", quantity, product, saleResult);
+            } catch (Exception e) {
+                System.out.println("Error processing sale for " + product + ": " + e.getMessage());
+            }
+        }
 
         // If there's a static SalesCounter class to track total sales
         // System.out.printf("Total Sales: %d%n", SalesCounter.totalSales);
